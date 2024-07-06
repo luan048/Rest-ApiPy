@@ -59,3 +59,51 @@ def add_movie():
     
     except Exception as ex:
         return jsonify({'message': str(ex)}), 500
+    
+@main.route('/<movie_id>', methods=['DELETE'])
+def del_movie(movie_id):
+
+    try:
+        affected_rows = MovieModel.del_movie(movie_id)
+        if affected_rows > 0:
+            return jsonify({'message': 'Filme deletado com sucesso!'}), 200
+        else:
+            return jsonify({'message': 'Filme não encontrado.'}), 404
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+    
+@main.route('/<movie_id>', methods=['PUT'])
+def up_movie(movie_id):
+
+    try:
+
+        data = request.json
+        newTitle = data.get('newTitle')
+
+        affected_rows = MovieModel.up_movie(newTitle, movie_id)
+
+        if affected_rows > 0:
+            return jsonify({'message' : 'Update Sucessfully'})
+        else:
+            return jsonify ({'message': 'Not Found'}), 404
+        
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
+    
+@main.route('/up/<movie_id>', methods=['PUT'])
+def up_released(movie_id):
+
+    try:
+
+        data = request.json
+        newReleased = data.get('newReleased')
+
+        affected_rows = MovieModel.up_released(newReleased, movie_id)
+
+        if affected_rows > 0:
+            return jsonify({'message': 'Update Sucessfully'})
+        else:
+            return jsonify({'message': 'Not Found'}), 404
+        
+    except Exception as ex:
+        return jsonify({'message': str(ex)}), 500
